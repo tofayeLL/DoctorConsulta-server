@@ -34,19 +34,28 @@ async function run() {
 
 
         // GET or FIND all for all services and popular services
-        app.get('/services', async(req, res) => {
+        app.get('/services', async (req, res) => {
             const cursor = serviceCollection.find()
             const result = await cursor.toArray();
             res.send(result);
         })
-        
+
         // GET single data for service details
-        app.get('/services/:id', async(req, res) => {
+        app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             // console.log(id);
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await serviceCollection.findOne(query);
             res.send(result)
+        })
+
+        // GET single Data By Use user email for Manage service section
+        app.get('/myServices/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { providerEmail: email }
+            const cursor = serviceCollection.find(query)
+            const result = await cursor.toArray();
+            res.send(result);
         })
 
 
@@ -54,10 +63,10 @@ async function run() {
 
         // POST
         app.post('/services', async (req, res) => {
-           const service = req.body;
-        //    console.log(service);
-           const result = await serviceCollection.insertOne(service);
-           res.send(result);
+            const service = req.body;
+            //    console.log(service);
+            const result = await serviceCollection.insertOne(service);
+            res.send(result);
 
         })
 
