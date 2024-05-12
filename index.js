@@ -62,7 +62,7 @@ async function run() {
         // GET single data for Edit service page
         app.get('/editService/:id', async (req, res) => {
             const id = req.params.id;
-            console.log('edit id', id)
+            // console.log('edit id', id)
             const query = { _id: new ObjectId(id) }
             const result = await serviceCollection.findOne(query);
             res.send(result)
@@ -71,11 +71,35 @@ async function run() {
         // DELETE
         app.delete('/myService/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id);
+            // console.log(id);
             const query = { _id: new ObjectId(id) }
             const result = await serviceCollection.deleteOne(query);
             res.send(result);
 
+        })
+
+        // UPDATE 
+        app.put('/service/:id', async (req, res) => {
+            const id = req.params.id;
+            const service = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateService = {
+                $set: {
+                    serviceName: service.serviceName,
+                    serviceImage: service.serviceImage,
+                    servicePrice: service.servicePrice,
+                    serviceArea: service.serviceArea,
+                    description: service.description,
+                    providerName: service.providerName,
+                    providerEmail: service.providerEmail,
+                    providerPhoto: service.providerPhoto
+                },
+            };
+
+
+            const result = await serviceCollection.updateOne(filter, updateService, options);
+            res.send(result);
         })
 
 
