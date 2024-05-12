@@ -49,7 +49,7 @@ async function run() {
         })
 
 
-       
+
         // GET single Data By Use user email for Manage service section
         app.get('/myServices/:email', async (req, res) => {
             const email = req.params.email;
@@ -59,14 +59,23 @@ async function run() {
             res.send(result);
         })
 
+        // GET single data for Edit service page
+        app.get('/editService/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('edit id', id)
+            const query = { _id: new ObjectId(id) }
+            const result = await serviceCollection.findOne(query);
+            res.send(result)
+        })
+
         // DELETE
-        app.delete('/myService/:id', async(req, res) => {
+        app.delete('/myService/:id', async (req, res) => {
             const id = req.params.id;
             console.log(id);
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await serviceCollection.deleteOne(query);
             res.send(result);
-            
+
         })
 
 
@@ -98,10 +107,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
-
-
 
 
 
