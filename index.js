@@ -31,6 +31,7 @@ async function run() {
         await client.connect();
 
         const serviceCollection = client.db("serviceDB").collection("services");
+        const bookingCollection = client.db("serviceDB").collection("bookedServices");
 
 
         // GET or FIND all for all services and popular services
@@ -62,7 +63,17 @@ async function run() {
         // GET single data for Edit service page
         app.get('/editService/:id', async (req, res) => {
             const id = req.params.id;
-            // console.log('edit id', id)
+            // console.log('Update', id)
+            const query = { _id: new ObjectId(id) }
+            const result = await serviceCollection.findOne(query);
+            res.send(result)
+        })
+
+
+        // GET single data for Booking Details page
+        app.get('/bookingDetails/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('Booking details', id)
             const query = { _id: new ObjectId(id) }
             const result = await serviceCollection.findOne(query);
             res.send(result)
@@ -119,6 +130,18 @@ async function run() {
 
 
 
+        // BOOKING Service Related 
+        // POST data from Booking Details page or purchase page
+        app.post('/bookedServices', async(req, res) => {
+            const service = req.body;
+            console.log(service);
+            const result = await bookingCollection.insertOne(service);
+            res.send(result);
+        })
+
+       
+
+
 
 
 
@@ -131,8 +154,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
 
 
 
