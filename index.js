@@ -139,7 +139,14 @@ async function run() {
             res.send(result);
         })
 
-       
+        // GET data from BookedService route
+        app.get('/bookedServices/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = {userEmail: email}
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
 
 
 
