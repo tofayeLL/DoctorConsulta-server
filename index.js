@@ -32,6 +32,7 @@ async function run() {
 
         const serviceCollection = client.db("serviceDB").collection("services");
         const bookingCollection = client.db("serviceDB").collection("bookedServices");
+        const blogsCollection = client.db("serviceDB").collection("blogs");
 
 
         // GET or FIND all for all services and popular services
@@ -144,6 +145,17 @@ async function run() {
             const email = req.params.email;
             const query = {userEmail: email}
             const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
+
+        // BLOGS RELATED METHOD
+
+          // GET or FIND all for all services and popular services
+          app.get('/blogs', async (req, res) => {
+            const cursor = blogsCollection.find()
             const result = await cursor.toArray();
             res.send(result);
         })
