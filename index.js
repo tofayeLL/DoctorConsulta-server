@@ -133,7 +133,7 @@ async function run() {
 
         // BOOKING Service Related 
         // POST data from Booking Details page or purchase page
-        app.post('/bookedServices', async(req, res) => {
+        app.post('/bookedServices', async (req, res) => {
             const service = req.body;
             console.log(service);
             const result = await bookingCollection.insertOne(service);
@@ -141,9 +141,19 @@ async function run() {
         })
 
         // GET data from BookedService route
-        app.get('/bookedServices/:email', async(req, res) => {
+        app.get('/bookedServices/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {userEmail: email}
+            const query = { userEmail: email }
+            const cursor = bookingCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
+        // GET data from ServiceToDo route
+        app.get('/servicesToDo/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { providerEmail: email }
             const cursor = bookingCollection.find(query);
             const result = await cursor.toArray();
             res.send(result);
@@ -153,8 +163,8 @@ async function run() {
 
         // BLOGS OR ARTICLE RELATED METHOD
 
-          // GET or FIND all for all services and popular services
-          app.get('/blogs', async (req, res) => {
+        // GET or FIND all for all services and popular services
+        app.get('/blogs', async (req, res) => {
             const cursor = blogsCollection.find()
             const result = await cursor.toArray();
             res.send(result);
