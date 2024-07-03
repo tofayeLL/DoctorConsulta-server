@@ -35,12 +35,35 @@ async function run() {
         const blogsCollection = client.db("serviceDB").collection("blogs");
 
 
-        // GET or FIND all for all services and popular services
-        app.get('/services', async (req, res) => {
-            const cursor = serviceCollection.find()
+
+
+
+
+        // popular services
+        app.get('/popularServices', async (req, res) => {
+            const cursor = serviceCollection.find();
             const result = await cursor.toArray();
             res.send(result);
         })
+
+
+        // GET or FIND all for all services page and also for search query
+        app.get('/services', async (req, res) => {
+
+            const filter = req.query;
+            // console.log(filter);
+            // this query for search implement in all services page
+            const query = {
+                serviceName: { $regex: filter.search, $options: 'i' }
+            }
+
+            const cursor = serviceCollection.find(query);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
+
 
         // GET single data for service details
         app.get('/service/:id', async (req, res) => {
@@ -150,12 +173,46 @@ async function run() {
         })
 
 
+        // GET search data from database
+        /*    app.get('/searchServices/:search', async (req, res) => {
+               const searchText = req.params.search;
+               console.log(searchText);
+               const query = {
+                   serviceName: { $regex: searchText, $options: 'i' }
+               }
+               const result = await serviceCollection.find(query).toArray();
+               console.log(result)
+               res.send(result);
+               
+           })
+    */
+
+
+
+
+
+
         // GET data from ServiceToDo route
         app.get('/servicesToDo/:email', async (req, res) => {
             const email = req.params.email;
             const query = { providerEmail: email }
             const cursor = bookingCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+
+        // PATCH
+        app.patch('/servicesToDo/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body;
+            const query = { _id: new ObjectId(id) }
+            const updateStatus = {
+                $set: {
+                    status
+                },
+            };
+            const result = await bookingCollection.updateOne(query, updateStatus);
             res.send(result);
         })
 
