@@ -174,7 +174,7 @@ async function run() {
 
 
         // GET search data from database
-           app.get('/searchServices/:search', async (req, res) => {
+        /*    app.get('/searchServices/:search', async (req, res) => {
                const searchText = req.params.search;
                console.log(searchText);
                const query = {
@@ -185,7 +185,7 @@ async function run() {
                res.send(result);
                
            })
-   
+    */
 
 
 
